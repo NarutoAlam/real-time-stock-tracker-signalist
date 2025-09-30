@@ -17,6 +17,12 @@ export const metadata: Metadata = {
   description: "Track real-time stock market data effortlessly. Get personalized alerts, instant updates and insights.",
 };
 
+/**
+ * Root layout component that renders the document root with site fonts, antialiasing, and dark theme.
+ *
+ * @param children - The React nodes to render inside the document body
+ * @returns The root React element containing the `<html lang="en">` and `<body>` elements with font CSS variables and the provided children
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
