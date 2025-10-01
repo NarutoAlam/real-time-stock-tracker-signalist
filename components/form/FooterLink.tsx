@@ -6,7 +6,7 @@ const FooterLink = ({ text, linkText, href }: FooterLinkProps) => {
         <p className="text-sm text-gray-500">
             {text}{" "}
             <Link href={href} className="footer-link">
-                {linkText}{" "}
+                {linkText}
             </Link>
         </p>
     </div>
