@@ -28,7 +28,7 @@ const UserDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex rounded-full items-center gap-3 text-gray-4 hover:text-yellow-500">
+                <Button variant="ghost" className="flex rounded-full items-center gap-3 text-gray-400 hover:text-yellow-500">
                     <Avatar className="w-8 h-8">
                         <AvatarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwO9P2kZOn-E7sYpB5YEpLyOZjleIPN-sAOw&s" />
                         <AvatarFallback className="bg-yellow-500 text-yellow-900">{user.name[0]}</AvatarFallback>
