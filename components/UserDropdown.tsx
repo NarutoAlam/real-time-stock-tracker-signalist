@@ -9,10 +9,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LogOut } from "lucide-react";
-import NavItems from "./NavItems";
+import NavItems from "@/components/NavItems";
 
 const UserDropdown = () => {
     const router = useRouter();
