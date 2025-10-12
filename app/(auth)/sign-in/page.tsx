@@ -3,26 +3,30 @@
 import FooterLink from "@/components/form/FooterLink";
 import InputField from "@/components/form/InputField";
 import { Button } from "@/components/ui/button";
+import { signInWithEmail } from "@/lib/actions/auth.actions";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 const SignIn = () => {
-   const { 
-        register, 
-        handleSubmit, 
-        formState: { errors, isSubmitting } 
-      } = useForm<SignInFormData>({
-            defaultValues: {
-                email: '',
-                password: ''
-            },
-            mode: 'onBlur'
-        });
-    const onSubmit = async(data: SignInFormData) => {
+    const router = useRouter();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting }
+    } = useForm<SignInFormData>({
+        defaultValues: {
+            email: '',
+            password: ''
+        },
+        mode: 'onBlur'
+    });
+    const onSubmit = async (data: SignInFormData) => {
         try {
-            console.log("Form Data:", data);
-            
+            const result = await signInWithEmail(data);
+            if (result.success) router.push('/');
         } catch (error) {
-            console.error("Error during sign In:", error);         
+            console.error("Error during sign In:", error);
         }
     };
 
@@ -32,24 +36,32 @@ const SignIn = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
-                <InputField 
+                <InputField
                     name="email"
                     label="Email"
                     // type="email"
                     placeholder="Enter your email"
                     register={register}
                     error={errors.email}
-                    validation={{ required: "Email is required" , pattern: /^\W+@\.\W+$/, message: "Invalid email address" }}
+                    validation={{
+                        required: "Email is required", pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Invalid email address"
+                        }
+                    }}
                 />
 
-                <InputField 
+                <InputField
                     name="password"
                     type="password"
                     label="Password"
                     placeholder="Enter your password"
                     register={register}
                     error={errors.password}
-                    validation={{ required: "Password is required" , minLength:8, message: "Password must be at least 8 characters" }}
+                    validation={{
+                        required: "Password is required",
+                        minLength: { value: 8, message: "Password must be at least 8 characters" }
+                    }}
                 />
 
                 <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
@@ -60,7 +72,7 @@ const SignIn = () => {
                     text="Don't have an account?"
                     linkText="Sign Up"
                     href="/sign-up"
-                 />
+                />
 
             </form>
         </>

@@ -5,14 +5,21 @@ import FooterLink from "@/components/form/FooterLink";
 import InputField from "@/components/form/InputField";
 import SelectField from "@/components/form/SelectField";
 import { Button } from "@/components/ui/button";
+import { signUpWithEmail } from "@/lib/actions/auth.actions";
 import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from "@/lib/constants";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 
 const SignUp = () => {
-    const { 
-        register, 
-        handleSubmit, 
-        control, 
+
+    const router = useRouter();
+
+    const {
+        register,
+        handleSubmit,
+        control,
         formState: { errors, isSubmitting } } = useForm<SignUpFormData>({
             defaultValues: {
                 fullName: '',
@@ -25,12 +32,22 @@ const SignUp = () => {
             },
             mode: 'onBlur'
         });
-    const onSubmit = async(data: SignUpFormData) => {
+    const onSubmit = async (data: SignUpFormData) => {
         try {
-            console.log("Form Data:", data);
+            const sanitizedData = {
+                ...data,
+                email: data.email.trim(),
+                fullName: data.fullName.trim(),
+            };
+            const result = await signUpWithEmail(sanitizedData);
             
+            if (result.success) router.push('/');
+
         } catch (error) {
-            console.error("Error during sign up:", error);         
+            console.error("Error during sign up:", error);
+            toast.error('Sign up failed', {
+                description: error instanceof Error ? error.message : 'Failed to create an account'
+            });
         }
     };
 
@@ -40,33 +57,43 @@ const SignUp = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
-                <InputField 
+                <InputField
                     name="fullName"
                     label="Full Name"
                     placeholder="Enter your full name"
                     register={register}
                     error={errors.fullName}
-                    validation={{ required: "Full name is required" , minLength:2}}
+                    validation={{
+                        required: "Full name is required",
+                        minLength: { value: 2, message: "Full name must be at least 2 characters" }
+                    }}
                 />
 
-                <InputField 
+                <InputField
                     name="email"
                     label="Email"
-                    // type="email"
                     placeholder="Enter your email"
                     register={register}
                     error={errors.email}
-                    validation={{ required: "Email is required" , pattern: /^\W+@\.\W+$/, message: "Invalid email address" }}
+                    validation={{
+                        required: "Email is required", pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Invalid email address"
+                        }
+                    }}
                 />
 
-                <InputField 
+                <InputField
                     name="password"
                     type="password"
                     label="Password"
                     placeholder="Enter your password"
                     register={register}
                     error={errors.password}
-                    validation={{ required: "Password is required" , minLength:8, message: "Password must be at least 8 characters" }}
+                    validation={{
+                        required: "Password is required",
+                        minLength: { value: 8, message: "Password must be at least 8 characters" }
+                    }}
                 />
 
                 <CountrySelectField
@@ -77,7 +104,7 @@ const SignUp = () => {
                     required
                 />
 
-                <SelectField 
+                <SelectField
                     name="investmentGoals"
                     label="Investment Goals"
                     placeholder="Select your investment goals"
@@ -87,7 +114,7 @@ const SignUp = () => {
                     required
                 />
 
-                <SelectField 
+                <SelectField
                     name="riskTolerance"
                     label="Risk Tolerance"
                     placeholder="select your risk level"
@@ -97,7 +124,7 @@ const SignUp = () => {
                     required
                 />
 
-                <SelectField 
+                <SelectField
                     name="preferredIndustry"
                     label="Preferred Industry"
                     placeholder="Select your preferred industry"
@@ -115,7 +142,7 @@ const SignUp = () => {
                     text="Already have an account?"
                     linkText="Sign In"
                     href="/sign-in"
-                 />
+                />
             </form>
         </>
     );
