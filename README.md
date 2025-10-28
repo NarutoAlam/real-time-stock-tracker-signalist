@@ -6,6 +6,7 @@ First, run the development server:
 
 ```bash
 npm run dev
+npx inngest-cli@latest dev 
 # or
 yarn dev
 # or
