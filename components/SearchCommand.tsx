@@ -8,6 +8,18 @@ import Link from "next/link";
 import { searchStocks } from "@/lib/actions/finnhub.actions";
 import { useDebounce } from "@/hooks/useDebounce";
 
+/**
+ * Render a searchable command dialog for finding and selecting stocks.
+ *
+ * The component shows a trigger (button or inline text) that opens a dialog with a search input,
+ * debounced live search, loading and empty states, and a list of stock results. Selecting a stock
+ * closes the dialog and resets the search state. The dialog can also be toggled with Cmd/Ctrl+K.
+ *
+ * @param renderAs - Render trigger as `'button'` (default) or `'text'` to use an inline label
+ * @param label - Trigger label text (defaults to `"Add stock"`)
+ * @param initialStocks - Seed list of stocks shown when there is no active search
+ * @returns The JSX element for the SearchCommand UI (trigger and command dialog)
+ */
 export default function SearchCommand({ renderAs = 'button', label = 'Add stock', initialStocks }: SearchCommandProps) {
     const [open, setOpen] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
