@@ -7,7 +7,7 @@ export interface WatchlistItem extends Document {
   addedAt: Date;
 }
 
-const WatchlistSchema = new Schema<WatchlistItem>(
+const WatchlistSchema = new Schema<WatchlistItem>( 
   {
     userId: { type: String, required: true, index: true },
     symbol: { type: String, required: true, uppercase: true, trim: true },
